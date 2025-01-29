@@ -30,7 +30,7 @@ def login(page: Page, credentials: dict):
     page.click("button[type='submit']")
     
     # Wait for dashboard to load
-    page.wait_for_selector("#root > div > section > div > div > div > header", timeout=BROWSER_SETTINGS["default_timeout"])
+    page.wait_for_selector("#root>div>section>div>div>div>header", timeout=BROWSER_SETTINGS["default_timeout"])
 
 def create_application(page: Page, config: dict):
     """Handle application creation process"""
@@ -44,10 +44,8 @@ def create_application(page: Page, config: dict):
     page.wait_for_timeout(FORM_DELAY)
     org_element = page.get_by_text(config["organization_name"], exact=True)
     org_element.scroll_into_view_if_needed()
-    page.evaluate("window.scrollBy(0, 150);")
+    page.evaluate("window.scrollBy(0, 250);")
     org_element.click(timeout=15000)
-
-    # page.wait_for_timeout(ANIMATION_DELAY)
 
     # Application type setup
     page.get_by_label("Application Type").click()
@@ -71,23 +69,7 @@ def create_application(page: Page, config: dict):
     page.get_by_text(config["application"]["category"]).click()
     page.wait_for_timeout(FORM_DELAY)
 
-def fill_address_section(page: Page, config: dict, section_name: str):
-    """Generic function to fill address sections"""
-    page.get_by_text(section_name).click()
-    page.fill("#APPLICANT_HOUSE_address", config["applicant"]["address"])
-    page.wait_for_timeout(FORM_DELAY)
-    
-    page.get_by_text("Default").first.click()
-    page.get_by_text("Rupantor", exact=True).click()
-    page.wait_for_timeout(FORM_DELAY)
-    
-    page.get_by_label("Not Exact").click()
-    page.get_by_placeholder("Enter exact address..").fill("Barikoi")
-    page.wait_for_selector("text=HQ (barikoi.com), Dr Mohsin", state="visible")
-    page.get_by_text("HQ (barikoi.com), Dr Mohsin").click()
-    page.wait_for_timeout(ANIMATION_DELAY)
-
-def main(org_name: str = "AB Bank PLC"):
+def main(org_name: str = "Bank Details"):
     """Main execution flow"""
     config = load_organization_config(org_name)
     
@@ -113,10 +95,52 @@ def main(org_name: str = "AB Bank PLC"):
             page.fill("#APPLICANT_phone", config["applicant"]["phone"])
             page.fill("#APPLICANT_designation", config["applicant"]["designation"])
             page.wait_for_timeout(FORM_DELAY)
+            
+            #Applicant House Trip details
+            page.get_by_text("Applicant House").click()
+            page.fill("#APPLICANT_HOUSE_address",
+              "Barikoi HQ (barikoi.com), Dr Mohsin Plaza, House  2/7, Begum Rokeya Sarani, Pallabi, Mirpur, "
+              "Dhaka, Mirpur, Dhaka")
+            page.wait_for_timeout(5000)
+            page.get_by_placeholder("Enter exact address..").fill("Barikoi")
+            page.wait_for_selector("#rc-tabs-0-panel-Create\ From\ Dashboard > div > div > "
+                           "div.ant-col.ant-col-14.ant-col-xs-24.ant-col-lg-24.ant-col-xl-12 > div > "
+                           "div.ant-card-body > form > div:nth-child(2) > div > div > "
+                           "div.ant-collapse-content.ant-collapse-content-active > div > "
+                           "div.ant-collapse.ant-collapse-icon-position-left > "
+                           "div.ant-collapse-item.ant-collapse-item-active > "
+                           "div.ant-collapse-content.ant-collapse-content-active > div > div > div:nth-child(2) > "
+                           "div.ant-col.ant-col-24.ant-form-item-control.ant-col-xs-24.ant-col-sm-24.ant-col-md-24"
+                           ".ant-col-lg-24.ant-col-xl-24.ant-col-xxl-19 > div > div > span > "
+                           "div.ant-card.ant-card-bordered > div > ul > li", state="visible")
+            page.wait_for_timeout(5000)
+            page.get_by_text("HQ (barikoi.com), Dr Mohsin").click()
+            page.wait_for_timeout(5000)
+            page.evaluate("window.scrollBy(0, 500);")
+            page.evaluate("window.scrollBy(0, 250);")
 
-            # Address sections
-            fill_address_section(page, config, "Applicant House")
-            fill_address_section(page, config, "Applicant Office")
+            #Applicant Office Trip details 
+            page.get_by_text("Applicant Office").click()
+            page.fill("#APPLICANT_OFFICE_address",
+              "Barikoi HQ (barikoi.com), Dr Mohsin Plaza, House  2/7, Begum Rokeya Sarani, Pallabi, Mirpur, "
+              "Dhaka, Mirpur, Dhaka")
+            page.wait_for_timeout(5000)
+            page.get_by_role("cell", name="Default", exact=True).get_by_placeholder("Enter exact address..").fill("Barikoi")
+            page.wait_for_selector("#rc-tabs-0-panel-Create\ From\ Dashboard > div > div > "
+                           "div.ant-col.ant-col-14.ant-col-xs-24.ant-col-lg-24.ant-col-xl-12 > div > "
+                           "div.ant-card-body > form > div:nth-child(2) > div > div > "
+                           "div.ant-collapse-content.ant-collapse-content-active > div > "
+                           "div.ant-collapse.ant-collapse-icon-position-left > "
+                           "div.ant-collapse-item.ant-collapse-item-active > "
+                           "div.ant-collapse-content.ant-collapse-content-active > div > div > div:nth-child(2) > "
+                           "div.ant-col.ant-col-24.ant-form-item-control.ant-col-xs-24.ant-col-sm-24.ant-col-md-24"
+                           ".ant-col-lg-24.ant-col-xl-24.ant-col-xxl-19 > div > div > span > "
+                           "div.ant-card.ant-card-bordered > div > ul > li", state="visible")
+            page.wait_for_timeout(5000)
+            page.get_by_role("list").get_by_text("HQ (barikoi.com), Dr Mohsin").click()
+            page.wait_for_timeout(5000)
+            page.evaluate("window.scrollBy(0, 500);")
+            page.evaluate("window.scrollBy(0, 250);")
 
             # Final submission
             page.get_by_role("button", name="Submit").click()

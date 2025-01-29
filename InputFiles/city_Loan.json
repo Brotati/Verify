@@ -1,0 +1,36 @@
+{
+  "organizations": {
+    "Bank Details": {
+      "organization_name": "City Bank PLC",
+      "credentials": {
+        "email": "rilusmahmud1@gmail.com",
+        "password": "#Rilus4880"
+      },
+      "application": {
+        "type": "Loan",
+        "sub_type": "City Solution",
+        "id": "CS-0014",
+        "tag": "Ordinary",
+        "category": "IN_STATION"
+      },
+      "applicant": {
+        "name": "test by playwright",
+        "spouse": "xyz",
+        "phone": "01762108999",
+        "designation": "dr"
+      },
+      "co-applicant": {
+        "name": "Co-applicant",
+        "spouse": "xyz",
+        "phone": "01762108999",
+        "designation": "dr"
+      },
+      "Guarantor": {
+        "name": "Guarantor",
+        "spouse": "xyz",
+        "phone": "01762108999",
+        "designation": "dr"
+      }
+    }
+  }
+}
